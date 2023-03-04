@@ -2,9 +2,15 @@
   "name": "dtl-project1",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx tsc",
+    "start": "node build/server.js",
+    "watch": "tsc-watch --esModuleInterop src/index.ts --outDir ./dist --onSuccess \"node ./dist/index.js\"",
+    "test": "db-migrate db:create storefronttest && npx tsc &&  db-migrate --env test up && ENV=test  jasmine-ts && npm run test/endpoints && db-migrate db:drop storefronttest",
+    "test/endpoints": "ENV=test jasmine build/_test_/handlers/order.js jasmine build/_test_/handlers/product.js jasmine build/_test_/handlers/user.js jasmine build/_test_/handlers/dashboard.js jasmine build/_test_/index.js",
+    "db-create": "db-migrate db:create storefront",
+    "tsc": "tsc"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
